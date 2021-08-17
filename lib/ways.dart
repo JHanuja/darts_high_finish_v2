@@ -1,3 +1,4 @@
+/*Classes that represent the different Ways*/
 abstract class Way {
   String convertToString();
 }
@@ -46,8 +47,7 @@ class SingleDoubleDouble extends Way {
 
   @override
   String convertToString() {
-    return 
-       "D" +
+    return "D" +
         prepare2.toString() +
         "  " +
         prepare1.toString() +
@@ -94,7 +94,8 @@ class TripleDoubleDouble extends Way {
   final int prepare2;
   final int finish;
 
-  TripleDoubleDouble({required this.prepare1, required this.prepare2, required this.finish});
+  TripleDoubleDouble(
+      {required this.prepare1, required this.prepare2, required this.finish});
 
   @override
   String convertToString() {
@@ -114,7 +115,8 @@ class TripleTripleDouble extends Way {
   final int prepare2;
   final int finish;
 
-  TripleTripleDouble({required this.prepare1, required this.prepare2, required this.finish});
+  TripleTripleDouble(
+      {required this.prepare1, required this.prepare2, required this.finish});
 
   @override
   String convertToString() {
@@ -151,5 +153,25 @@ class Bogey extends Way {
   @override
   String convertToString() {
     return "Bogey";
+  }
+}
+
+class Finish {
+  static final Map<int, Way> finishes = <int, Way>{};
+  int _score;
+  final int _d1;
+  final int _d2;
+
+  Finish({required score, required d1, required d2})
+      : _score = score,
+        _d1 = d1,
+        _d2 = d2;
+
+  get score => _score;
+  get d1 => _d1;
+  get d2 => _d2;
+
+  void updateScore(int score) {
+    _score = score;
   }
 }
