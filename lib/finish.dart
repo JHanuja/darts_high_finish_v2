@@ -34,8 +34,8 @@ class Finish {
   void _calculateWays() {
     _standartWay = _calculateStandartWay();
     List<List<String>> l = _calculateWaysFilteredForDouble();
-    _waysD1 = l.isNotEmpty ? l.elementAt(0) : [];
-    _waysD2 = l.length == 2 ? l.elementAt(1) : [];
+    _waysD1 = (l.isNotEmpty && _score>=60)? l.elementAt(0) : [];
+    _waysD2 = (l.length == 2 && _score >=60)? l.elementAt(1) : [];
   }
 
   String _calculateStandartWay() {

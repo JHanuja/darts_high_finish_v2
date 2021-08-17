@@ -29,6 +29,14 @@ void main() {
       Finish g = Finish(d1: 16, d2: 18, score: 134);
       expect(g.waysD1.contains("T17  T17  D16"), true);
       expect(g.waysD2.contains("T20  D19  D18"), true);
+      Finish h = Finish(d1: 16, d2: 18, score: 200);
+      expect(h.waysD1.isEmpty, true);
+      expect(h.waysD2.isEmpty, true);
+      Finish i = Finish(d1: 16, d2: 18, score: 35);
+      print(i.waysD1);
+      expect(i.waysD1.isEmpty, true);
+      expect(i.waysD2.isEmpty, true);
+      
     });
   });
 }
