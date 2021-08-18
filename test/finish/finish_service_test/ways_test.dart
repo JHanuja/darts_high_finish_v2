@@ -1,4 +1,5 @@
-import 'package:darts_high_finish_v2/ways.dart';
+
+import 'package:darts_high_finish_v2/finish/finish_service/ways.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:darts_high_finish_v2/finish.dart';
+import 'package:darts_high_finish_v2/finish/finish_service/finish.dart';
 import 'package:equatable/equatable.dart';
 
 part 'finish_event.dart';
