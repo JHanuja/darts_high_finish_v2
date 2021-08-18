@@ -9,10 +9,21 @@ class Finish {
   final int _d1;
   final int _d2;
 
+  int _dartsNeeded;
+  double _average;
+  final int _startScore;
+  int _thrownPoints;
+  int _dartsNeededForLeg;
+
   Finish({required score, required d1, required d2})
       : _score = score,
+        _startScore = score,
+        _average = 0.0,
+        _thrownPoints = 0,
         _d1 = d1,
         _d2 = d2,
+        _dartsNeeded = 0,
+        _dartsNeededForLeg = 0,
         _finishes = <int, Way>{} {
     _initializeMap();
     _calculateWays();
@@ -21,21 +32,37 @@ class Finish {
   int get score => _score;
   int get d1 => _d1;
   int get d2 => _d2;
-  Map<int, Way> get finishes => _finishes;
   String get standartWay => _standartWay;
   List<String> get waysD1 => _waysD1;
   List<String> get waysD2 => _waysD2;
+  double get average => _average;
+  int get dartsNeededForLeg => _dartsNeededForLeg;
 
-  void updateScore(int score) {
+  void updateScore(int score, int dartsNeeded) {
     _score -= score;
+    _dartsNeeded += dartsNeeded;
+    _dartsNeededForLeg += dartsNeeded;
+    _thrownPoints += score;
     _calculateWays();
+    _calculateAverage();
+  }
+
+  void _calculateAverage() {
+    _average = (_thrownPoints / _dartsNeeded) * 3;
+    return;
+  }
+
+  void resetMatch() {
+    _score = _startScore;
+    _dartsNeededForLeg = 0;
+    return;
   }
 
   void _calculateWays() {
     _standartWay = _calculateStandartWay();
     List<List<String>> l = _calculateWaysFilteredForDouble();
-    _waysD1 = (l.isNotEmpty && _score>=60)? l.elementAt(0) : [];
-    _waysD2 = (l.length == 2 && _score >=60)? l.elementAt(1) : [];
+    _waysD1 = (l.isNotEmpty && _score >= 60) ? l.elementAt(0) : [];
+    _waysD2 = (l.length == 2 && _score >= 60) ? l.elementAt(1) : [];
   }
 
   String _calculateStandartWay() {
@@ -55,7 +82,7 @@ class Finish {
 
     bool hasJustDoubleWay = false;
 
-    if (finishes[_score] is JustDouble) {
+    if (_finishes[_score] is JustDouble) {
       hasJustDoubleWay = true;
     }
 
