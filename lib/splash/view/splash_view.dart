@@ -40,7 +40,7 @@ class _SplashViewState extends State<SplashView> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) {
-                  return DoublesView();
+                  return DoublesPage();
                 },
               ),
             );
