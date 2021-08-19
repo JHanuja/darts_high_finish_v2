@@ -6,11 +6,20 @@ import 'package:equatable/equatable.dart';
 part 'splash_state.dart';
 
 class SplashCubit extends Cubit<SplashState> {
+  late Timer t;
+
   SplashCubit() : super(SplashInitial());
 
   void startTimer() {
-    Timer(const Duration(seconds: 3), () {
+    t = Timer(const Duration(seconds: 3), () {
       emit(SplashFinished());
     });
+    
+  }
+
+  @override
+  Future<void> close() {
+    t.cancel();
+    return super.close();
   }
 }
