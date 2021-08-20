@@ -1,4 +1,5 @@
 import 'package:darts_high_finish_v2/doubles/cubit/doubles_cubit.dart';
+import 'package:darts_high_finish_v2/doubles/cubit/gamemode_cubit.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
 import 'package:darts_high_finish_v2/top/view/top_view.dart';
 import 'package:flutter/material.dart';
@@ -22,16 +23,50 @@ class DoublesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return TopView(
       child: Scaffold(
-        body: Row(
+        body: Column(
           children: [
+            Container(
+              height: context.read<TopCubit>().state.safeAreaHeight * 0.6,
+              child: Row(
+                children: [
+                  Expanded(
+                      child: DoubleButtonGroup(
+                    buttonGroup: true,
+                  )),
+                  Expanded(
+                      child: DoubleButtonGroup(
+                    buttonGroup: false,
+                  ))
+                ],
+              ),
+            ),
+            Container(
+              height: context.read<TopCubit>().state.safeAreaHeight * 0.2,
+              //color: Colors.red,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: context.read<TopCubit>().state.value4),
+                child: BlocProvider<GamemodeCubit>(
+                  create: (context) => GamemodeCubit(),
+                  child: GameMode(),
+                ),
+              ),
+            ),
             Expanded(
-                child: DoubleButtonGroup(
-              buttonGroup: true,
-            )),
-            Expanded(
-                child: DoubleButtonGroup(
-              buttonGroup: false,
-            ))
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Game On',
+                    style: TextStyle(
+                        fontSize: context.read<TopCubit>().state.value3 * 1.5),
+                  ),
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.indigo)),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -50,7 +85,8 @@ class DoubleButtonGroup extends StatelessWidget {
     return BlocBuilder<DoublesCubit, DoublesState>(builder: (context, state) {
       return Column(
         children: [
-          SizedBox(height: context.read<TopCubit>().state.safeAreaHeight / 12),
+          SizedBox(
+              height: context.read<TopCubit>().state.safeAreaHeight * 0.05),
           ElevatedButton(
             onPressed: () {
               buttonGroup
@@ -68,7 +104,8 @@ class DoubleButtonGroup extends StatelessWidget {
             ),
             child: Text('D20'),
           ),
-          SizedBox(height: context.read<TopCubit>().state.safeAreaHeight / 25),
+          SizedBox(
+              height: context.read<TopCubit>().state.safeAreaHeight * 0.03),
           ElevatedButton(
             onPressed: () {
               buttonGroup
@@ -86,7 +123,8 @@ class DoubleButtonGroup extends StatelessWidget {
             ),
             child: Text('D18'),
           ),
-          SizedBox(height: context.read<TopCubit>().state.safeAreaHeight / 25),
+          SizedBox(
+              height: context.read<TopCubit>().state.safeAreaHeight * 0.03),
           ElevatedButton(
             onPressed: () {
               buttonGroup
@@ -104,7 +142,8 @@ class DoubleButtonGroup extends StatelessWidget {
             ),
             child: Text('D16'),
           ),
-          SizedBox(height: context.read<TopCubit>().state.safeAreaHeight / 25),
+          SizedBox(
+              height: context.read<TopCubit>().state.safeAreaHeight * 0.03),
           ElevatedButton(
             onPressed: () {
               buttonGroup
@@ -122,7 +161,8 @@ class DoubleButtonGroup extends StatelessWidget {
             ),
             child: Text('D14'),
           ),
-          SizedBox(height: context.read<TopCubit>().state.safeAreaHeight / 25),
+          SizedBox(
+              height: context.read<TopCubit>().state.safeAreaHeight * 0.03),
           ElevatedButton(
             onPressed: () {
               buttonGroup
@@ -143,5 +183,104 @@ class DoubleButtonGroup extends StatelessWidget {
         ],
       );
     });
+  }
+}
+
+class GameMode extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<GamemodeCubit, GamemodeState>(
+      builder: (context, state) {
+        return Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        context.read<GamemodeCubit>().chooseGameMode(1);
+                      },
+                      child: Container(
+                        color: state is Gamemode100to170 ? Colors.orange : Colors.green,
+                        child: Center(
+                          child: Text(
+                            '100-170',
+                            style: TextStyle(
+                                fontSize:
+                                    context.read<TopCubit>().state.value3),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        context.read<GamemodeCubit>().chooseGameMode(3);
+                      },
+                      child: Container(
+                        color: state is Gamemode301 ? Colors.orange : Colors.green,
+                        child: Center(
+                          child: Text(
+                            '301',
+                            style: TextStyle(
+                                fontSize:
+                                    context.read<TopCubit>().state.value3),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        context.read<GamemodeCubit>().chooseGameMode(2);
+                      },
+                      child: Container(
+                        color: state is Gamemode170to301 ? Colors.orange : Colors.green,
+                        child: Center(
+                          child: Text(
+                            '170-301',
+                            style: TextStyle(
+                                fontSize:
+                                    context.read<TopCubit>().state.value3),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        context.read<GamemodeCubit>().chooseGameMode(4);
+                      },
+                      child: Container(
+                        color:
+                            state is Gamemode501 ? Colors.orange : Colors.green,
+                        child: Center(
+                          child: Text(
+                            '501',
+                            style: TextStyle(
+                                fontSize:
+                                    context.read<TopCubit>().state.value3),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

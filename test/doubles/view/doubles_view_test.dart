@@ -12,6 +12,12 @@ void main() {
       expect(find.text('D16'), findsNWidgets(2));
       expect(find.text('D14'), findsNWidgets(2));
       expect(find.text('D12'), findsNWidgets(2));
+      expect(find.text('100-170'), findsOneWidget);
+      expect(find.text('170-301'), findsOneWidget);
+      expect(find.text('301'), findsOneWidget);
+      expect(find.text('501'), findsOneWidget);
+      expect(find.text('Game On'), findsOneWidget);
+
     });
   });
 }
