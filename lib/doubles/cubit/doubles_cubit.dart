@@ -7,4 +7,7 @@ class DoublesCubit extends Cubit<DoublesState> {
   DoublesCubit() : super(DoublesState());
 
   void chooseDouble({int? d1, int? d2}) => emit(state.copyWith(d1: d1, d2: d2));
+
+  bool choosen () => (state.d1 != 0) && (state.d2!= 0);
+
 }

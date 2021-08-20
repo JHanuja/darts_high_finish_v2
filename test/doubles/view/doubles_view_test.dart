@@ -1,6 +1,5 @@
 import 'package:darts_high_finish_v2/doubles/view/doubles_view.dart';
 import 'package:darts_high_finish_v2/main.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

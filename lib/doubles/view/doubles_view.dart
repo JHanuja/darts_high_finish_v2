@@ -1,16 +1,25 @@
 import 'package:darts_high_finish_v2/doubles/cubit/doubles_cubit.dart';
 import 'package:darts_high_finish_v2/doubles/cubit/gamemode_cubit.dart';
+import 'package:darts_high_finish_v2/finish/view/finish_view.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
 import 'package:darts_high_finish_v2/top/view/top_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
 class DoublesPage extends StatelessWidget {
   const DoublesPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => DoublesCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<GamemodeCubit>(
+          create: (BuildContext context) => GamemodeCubit(),
+        ),
+        BlocProvider<DoublesCubit>(
+          create: (BuildContext context) => DoublesCubit(),
+        ),
+      ],
       child: DoublesView(),
     );
   }
@@ -46,16 +55,39 @@ class DoublesView extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: context.read<TopCubit>().state.value4),
-                child: BlocProvider<GamemodeCubit>(
-                  create: (context) => GamemodeCubit(),
-                  child: GameMode(),
-                ),
+                child: GameMode(),
               ),
             ),
             Expanded(
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if ((context.read<GamemodeCubit>().state
+                            is! GamemodeInitial) &&
+                        context.read<DoublesCubit>().choosen()) {
+                      int d1 = context.read<DoublesCubit>().state.d1;
+                      int d2 = context.read<DoublesCubit>().state.d2;
+                      GamemodeState gameMode = context.read<GamemodeCubit>().state;
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return FinishView(
+                          d1:d1,
+                          d2:d2,
+                          gameMode: gameMode,
+                        );
+                      }));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text(
+                          "Please select two Doubles and Game Mode",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ));
+                    }
+                  },
                   child: Text(
                     'Game On',
                     style: TextStyle(
@@ -202,7 +234,9 @@ class GameMode extends StatelessWidget {
                         context.read<GamemodeCubit>().chooseGameMode(1);
                       },
                       child: Container(
-                        color: state is Gamemode100to170 ? Colors.orange : Colors.green,
+                        color: state is Gamemode100to170
+                            ? Colors.orange
+                            : Colors.green,
                         child: Center(
                           child: Text(
                             '100-170',
@@ -220,7 +254,8 @@ class GameMode extends StatelessWidget {
                         context.read<GamemodeCubit>().chooseGameMode(3);
                       },
                       child: Container(
-                        color: state is Gamemode301 ? Colors.orange : Colors.green,
+                        color:
+                            state is Gamemode301 ? Colors.orange : Colors.green,
                         child: Center(
                           child: Text(
                             '301',
@@ -244,7 +279,9 @@ class GameMode extends StatelessWidget {
                         context.read<GamemodeCubit>().chooseGameMode(2);
                       },
                       child: Container(
-                        color: state is Gamemode170to301 ? Colors.orange : Colors.green,
+                        color: state is Gamemode170to301
+                            ? Colors.orange
+                            : Colors.green,
                         child: Center(
                           child: Text(
                             '170-301',
