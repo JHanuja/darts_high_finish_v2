@@ -10,13 +10,14 @@ void main() {
     });
     group('Finish Out of Range', () {
       test('support value comparison', () {
-        expect(const FinishOutOfRange(100), const FinishOutOfRange(100));
+        expect(const FinishOutOfRange(score: 100,error:false), const FinishOutOfRange(score:100,error:false));
       });
     });
-    group('Finish in rane', () {
+    group('Finish in range', () {
       test('support value comparison', () {
         expect(
             const FinishInRange(
+                error:false,
                 d1: 20,
                 d2: 18,
                 score: 100,
@@ -24,6 +25,7 @@ void main() {
                 waysD1: ['hello'],
                 waysD2: ['world']),
             const FinishInRange(
+                error:false,
                 d1: 20,
                 d2: 18,
                 score: 100,

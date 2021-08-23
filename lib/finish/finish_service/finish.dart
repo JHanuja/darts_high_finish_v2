@@ -1,6 +1,5 @@
 import 'package:darts_high_finish_v2/finish/finish_service/ways.dart';
 
-
 class Finish {
   final Map<int, Way> _finishes;
   late String _standartWay;
@@ -9,17 +8,31 @@ class Finish {
   int _score;
   final int _d1;
   final int _d2;
+  final int _gameMode;
 
   int _dartsNeeded;
   double _average;
-  final int _startScore;
   int _thrownPoints;
   int _dartsNeededForLeg;
 
-  Finish({required score, required d1, required d2})
-      : _score = score,
-        _startScore = score,
+  static int calculateStartScore(int gameMode) {
+    switch (gameMode) {
+      case 1:
+        return 100;
+      case 2:
+        return 200;
+      case 3:
+        return 301;
+      case 4:
+        return 501;
+    }
+    return 10;
+  }
+
+  Finish({required d1, required d2, required int gameMode})
+      : _score = calculateStartScore(gameMode),
         _average = 0.0,
+        _gameMode = gameMode,
         _thrownPoints = 0,
         _d1 = d1,
         _d2 = d2,
@@ -39,13 +52,18 @@ class Finish {
   double get average => _average;
   int get dartsNeededForLeg => _dartsNeededForLeg;
 
-  void updateScore(int score, int dartsNeeded) {
-    _score -= score;
-    _dartsNeeded += dartsNeeded;
-    _dartsNeededForLeg += dartsNeeded;
-    _thrownPoints += score;
-    _calculateWays();
-    _calculateAverage();
+  bool updateScore(int score, int dartsNeeded) {
+    if ((score >= 0) && (score <= 180) && (_score - score >= 0)) {
+      _score -= score;
+      _dartsNeeded += dartsNeeded;
+      _dartsNeededForLeg += dartsNeeded;
+      _thrownPoints += score;
+      _calculateWays();
+      _calculateAverage();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void _calculateAverage() {
@@ -54,7 +72,7 @@ class Finish {
   }
 
   void resetMatch() {
-    _score = _startScore;
+    _score = calculateStartScore(_gameMode);
     _dartsNeededForLeg = 0;
     return;
   }
