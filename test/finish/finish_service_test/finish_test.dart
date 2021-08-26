@@ -29,8 +29,7 @@ void main() {
       expect(f.waysD1.isEmpty, true);
       expect(f.waysD2.isEmpty, true);
       f.updateScore(167, 3);
-      expect(f.waysD1.contains("T17  T17  D16"), true);
-      expect(f.waysD2.contains("T20  D19  D18"), true);
+      expect(f.waysD1.contains("T16  T18  D16"), true);
     });
     test('calculateAverage', () {
       Finish f = Finish(d1: 20, d2: 18, gameMode: 3);
@@ -38,11 +37,27 @@ void main() {
       f.updateScore(100, 3);
       expect(f.average, 80);
       expect(f.dartsNeededForLeg, 6);
-      f.resetMatch();
-      expect(f.average, 80);
-      expect(f.dartsNeededForLeg, 0);
+      f.resetScore();
+      expect(f.average, 60);
+      expect(f.dartsNeededForLeg, 3);
       f.updateScore(140, 3);
       expect(f.average, 100);
+      expect(f.dartsNeededForLeg, 6);
+    });
+    test('calculateStartScore', () {
+      Finish f = Finish(d1: 20, d2: 18, gameMode: 3);
+      expect(f.score, 301);
+    });
+
+    test('reset Score', () {
+      Finish f = Finish(d1: 20, d2: 18, gameMode: 3);
+      f.updateScore(100, 3);
+      f.updateScore(100, 3);
+      expect(f.score, 101);
+      expect(f.dartsNeededForLeg, 6);
+      f.resetScore();
+      expect(f.score, 201);
+      expect(f.dartsNeededForLeg, 3);
     });
   });
 }

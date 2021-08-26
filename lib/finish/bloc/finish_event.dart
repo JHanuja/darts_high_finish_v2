@@ -10,7 +10,11 @@ abstract class FinishEvent extends Equatable {
 class ScoreEntered extends FinishEvent {
   final int score;
   final int dartsNeeded;
-  const ScoreEntered({required this.score,required this.dartsNeeded});
+  const ScoreEntered({required this.score, required this.dartsNeeded});
+}
+
+class ScoreReset extends FinishEvent {
+  const ScoreReset();
 }
 
 class GameStarted extends FinishEvent {

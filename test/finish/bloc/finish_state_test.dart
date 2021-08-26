@@ -10,14 +10,23 @@ void main() {
     });
     group('Finish Out of Range', () {
       test('support value comparison', () {
-        expect(const FinishOutOfRange(score: 100,error:false), const FinishOutOfRange(score:100,error:false));
+        expect(
+            const FinishOutOfRange(
+              scoreEntered: 0,
+                dartsNeeded: 0, average: 0.0, score: 100, error: false),
+            const FinishOutOfRange(
+              scoreEntered: 0,
+                dartsNeeded: 0, average: 0.0, score: 100, error: false));
       });
     });
     group('Finish in range', () {
       test('support value comparison', () {
         expect(
             const FinishInRange(
-                error:false,
+              scoreEntered: 0,
+                dartsNeeded: 0,
+                average: 0.0,
+                error: false,
                 d1: 20,
                 d2: 18,
                 score: 100,
@@ -25,7 +34,10 @@ void main() {
                 waysD1: ['hello'],
                 waysD2: ['world']),
             const FinishInRange(
-                error:false,
+              scoreEntered: 0,
+                dartsNeeded: 0,
+                average: 0.0,
+                error: false,
                 d1: 20,
                 d2: 18,
                 score: 100,

@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:darts_high_finish_v2/finish/finish_service/throw.dart';
 import 'package:darts_high_finish_v2/finish/finish_service/ways.dart';
 
 class Finish {
@@ -9,6 +12,7 @@ class Finish {
   final int _d1;
   final int _d2;
   final int _gameMode;
+  final List<Throw> _thrownScores;
 
   int _dartsNeeded;
   double _average;
@@ -18,15 +22,43 @@ class Finish {
   static int calculateStartScore(int gameMode) {
     switch (gameMode) {
       case 1:
-        return 100;
+        if (not170()) {
+          int min = 100;
+          int max = 170;
+          Random rnd = Random();
+          int r = min + rnd.nextInt(max - min);
+          return r;
+        } else {
+          return 170;
+        }
       case 2:
-        return 200;
+        if (not170()) {
+          int min = 170;
+          int max = 301;
+          Random rnd = Random();
+          int r = min + rnd.nextInt(max - min);
+          return r;
+        } else {
+          return 170;
+        }
       case 3:
         return 301;
       case 4:
         return 501;
     }
     return 10;
+  }
+
+  static bool not170() {
+    int min = 1;
+    int max = 4;
+    Random rnd = Random();
+    int r = min + rnd.nextInt(max - min);
+    if (r == 1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Finish({required d1, required d2, required int gameMode})
@@ -38,6 +70,7 @@ class Finish {
         _d2 = d2,
         _dartsNeeded = 0,
         _dartsNeededForLeg = 0,
+        _thrownScores = [],
         _finishes = <int, Way>{} {
     _initializeMap();
     _calculateWays();
@@ -58,6 +91,7 @@ class Finish {
       _dartsNeeded += dartsNeeded;
       _dartsNeededForLeg += dartsNeeded;
       _thrownPoints += score;
+      _thrownScores.add(Throw(score, dartsNeeded));
       _calculateWays();
       _calculateAverage();
       return true;
@@ -66,8 +100,22 @@ class Finish {
     }
   }
 
+  bool resetScore() {
+    if (_thrownScores.isNotEmpty) {
+      _score += _thrownScores.last.scoredPoints;
+      _thrownPoints -= _thrownScores.last.scoredPoints;
+      _dartsNeededForLeg -= _thrownScores.last.dartsNeeded;
+      _dartsNeeded -= _thrownScores.last.dartsNeeded;
+      _thrownScores.removeLast();
+      _calculateAverage();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void _calculateAverage() {
-    _average = (_thrownPoints / _dartsNeeded) * 3;
+    _average = _dartsNeeded > 0 ? ((_thrownPoints / _dartsNeeded) * 3) : 0.0;
     return;
   }
 
@@ -79,9 +127,14 @@ class Finish {
 
   void _calculateWays() {
     _standartWay = _calculateStandartWay();
-    List<List<String>> l = _calculateWaysFilteredForDouble();
-    _waysD1 = (l.isNotEmpty && _score >= 60) ? l.elementAt(0) : [];
-    _waysD2 = (l.length == 2 && _score >= 60) ? l.elementAt(1) : [];
+    if (_standartWay != "") {
+      List<List<String>> l = _calculateWaysFilteredForDouble();
+      _waysD1 = (l.isNotEmpty && _score > 60) ? l.elementAt(0) : [];
+      _waysD2 = (l.length == 2 && _score > 60) ? l.elementAt(1) : [];
+    } else {
+      _waysD1 = [];
+      _waysD2 = [];
+    }
   }
 
   String _calculateStandartWay() {
@@ -92,411 +145,107 @@ class Finish {
 
   List<List<String>> _calculateWaysFilteredForDouble() {
     List<List<String>> results = [];
-    List<Way> d1Ways = _calculateWaysForDouble(_d1);
-    List<Way> d2Ways = _calculateWaysForDouble(_d2);
-    List<String> resultsd1 = [];
-    List<String> resultsd2 = [];
+    List<Way> d1Ways = _calculateWaysForDouble(_d1, _finishes[_score]!);
+    List<Way> d2Ways = _calculateWaysForDouble(_d2, _finishes[_score]!);
+    List<String> resultsd1 = d1Ways.map((e) => e.convertToString()).toList();
+    List<String> resultsd2 = d2Ways.map((e) => e.convertToString()).toList();
 
-    //---------------Just Double Way--------------//
+    List<int> removeIndexesD1 = [];
+    List<String> redundantStringsD1 = [];
+    for (int i = 0; i < resultsd1.length; i++) {
+      String item = resultsd1[i];
 
-    bool hasJustDoubleWay = false;
+      String a = item.substring(0, 3);
+      String b = item.substring(5, 8);
 
-    if (_finishes[_score] is JustDouble) {
-      hasJustDoubleWay = true;
-    }
+      String s = b + "  " + a + "  " + "D" + d1.toString();
+    
 
-    for (Way w in d1Ways) {
-      if (w is JustDouble) {
-        hasJustDoubleWay = true;
-      }
-    }
-    for (Way w in d2Ways) {
-      if (w is JustDouble) {
-        hasJustDoubleWay = true;
-      }
-    }
-
-    List<int> indexesD1 = [];
-    for (int i = 0; i < d1Ways.length; i++) {
-      if (hasJustDoubleWay && !(d1Ways[i] is! JustDouble)) {
-        indexesD1.add(i);
+      if (resultsd1.contains(s) &&
+          !(a == b) &&
+          (!redundantStringsD1.contains(item))) {
+        removeIndexesD1.add(i);
+        redundantStringsD1.add(s);
       }
     }
 
-    List<int> indexesD2 = [];
-    for (int i = 0; i < d2Ways.length; i++) {
-      if (hasJustDoubleWay && !(d2Ways[i] is! JustDouble)) {
-        indexesD2.add(i);
+    List<int> removeIndexesD2 = [];
+    List<String> redundantStringsD2 = [];
+    for (int i = 0; i < resultsd2.length; i++) {
+      String item = resultsd2[i];
+
+      String a = item.substring(0, 3);
+      String b = item.substring(5, 8);
+
+      String s = b + "  " + a + "  " + "D" + d2.toString();
+
+
+      if (resultsd2.contains(s) &&
+          !(a == b) &&
+          (!redundantStringsD2.contains(item))) {
+        removeIndexesD2.add(i);
+        redundantStringsD2.add(s);
       }
     }
 
-    for (int i = 0; i < indexesD1.length; i++) {
-      d1Ways.removeAt(indexesD1[i] - i);
+    for (int i = 0; i < removeIndexesD1.length; i++) {
+      resultsd1.removeAt(removeIndexesD1[i] - i);
     }
 
-    for (int i = 0; i < indexesD2.length; i++) {
-      d2Ways.removeAt(indexesD2[i] - i);
+    for (int i = 0; i < removeIndexesD2.length; i++) {
+      resultsd2.removeAt(removeIndexesD2[i] - i);
     }
 
-    if (hasJustDoubleWay) {
-      for (Way w in d1Ways) {
-        resultsd1.add(w.convertToString());
-      }
-
-      for (Way w in d2Ways) {
-        resultsd2.add(w.convertToString());
-      }
-      results.add(resultsd1);
-      results.add(resultsd2);
-      return results;
-    }
-    //---------------Single Double Way--------------//
-
-    bool hasSingleDoubleWay = false;
-
-    if (_finishes[_score] is SingleDouble) {
-      hasSingleDoubleWay = true;
-    }
-
-    for (Way w in d1Ways) {
-      if (w is SingleDouble) {
-        hasSingleDoubleWay = true;
-      }
-    }
-    for (Way w in d2Ways) {
-      if (w is SingleDouble) {
-        hasSingleDoubleWay = true;
-      }
-    }
-
-    indexesD1.clear();
-    for (int i = 0; i < d1Ways.length; i++) {
-      if (hasSingleDoubleWay && !(d1Ways[i] is! SingleDouble)) {
-        indexesD1.add(i);
-      }
-    }
-
-    indexesD2.clear();
-    for (int i = 0; i < d2Ways.length; i++) {
-      if (hasSingleDoubleWay && !(d2Ways[i] is! SingleDouble)) {
-        indexesD2.add(i);
-      }
-    }
-
-    for (int i = 0; i < indexesD1.length; i++) {
-      d1Ways.removeAt(indexesD1[i] - i);
-    }
-
-    for (int i = 0; i < indexesD2.length; i++) {
-      d2Ways.removeAt(indexesD2[i] - i);
-    }
-
-    if (hasSingleDoubleWay) {
-      for (Way w in d1Ways) {
-        resultsd1.add(w.convertToString());
-      }
-
-      for (Way w in d2Ways) {
-        resultsd2.add(w.convertToString());
-      }
-      results.add(resultsd1);
-      results.add(resultsd2);
-      return results;
-    }
-
-    //---------------Triple Double  Double Double Way--------------//
-
-    bool hasTripleDoubleOrDoubleDoubleWay = false;
-
-    if (_finishes[_score] is TripleDouble ||
-        _finishes[_score] is DoubleDouble) {
-      hasTripleDoubleOrDoubleDoubleWay = true;
-    }
-
-    for (Way w in d1Ways) {
-      if (w is TripleDouble || w is DoubleDouble) {
-        hasTripleDoubleOrDoubleDoubleWay = true;
-      }
-    }
-    for (Way w in d2Ways) {
-      if (w is TripleDouble || w is DoubleDouble) {
-        hasTripleDoubleOrDoubleDoubleWay = true;
-      }
-    }
-
-    indexesD1.clear();
-    for (int i = 0; i < d1Ways.length; i++) {
-      if (hasTripleDoubleOrDoubleDoubleWay &&
-          !(d1Ways[i] is! DoubleDouble || d1Ways[i] is! TripleDouble)) {
-        indexesD1.add(i);
-      }
-    }
-
-    indexesD2.clear();
-    for (int i = 0; i < d2Ways.length; i++) {
-      if (hasTripleDoubleOrDoubleDoubleWay &&
-          !(d2Ways[i] is! DoubleDouble || d2Ways[i] is! TripleDouble)) {
-        indexesD2.add(i);
-      }
-    }
-
-    for (int i = 0; i < indexesD1.length; i++) {
-      d1Ways.removeAt(indexesD1[i] - i);
-    }
-
-    for (int i = 0; i < indexesD2.length; i++) {
-      d2Ways.removeAt(indexesD2[i] - i);
-    }
-
-    if (hasTripleDoubleOrDoubleDoubleWay) {
-      for (Way w in d1Ways) {
-        resultsd1.add(w.convertToString());
-      }
-
-      for (Way w in d2Ways) {
-        resultsd2.add(w.convertToString());
-      }
-      results.add(resultsd1);
-      results.add(resultsd2);
-      return results;
-    }
-
-    //---------------Single Triple Double  Single Double Double Way--------------//
-
-    bool hasSingleTripleDoubleOrSingleDoubleDoubleWay = false;
-
-    if (_finishes[_score] is SingleTripleDouble ||
-        _finishes[_score] is SingleDoubleDouble) {
-      hasSingleTripleDoubleOrSingleDoubleDoubleWay = true;
-    }
-
-    for (Way w in d1Ways) {
-      if (w is SingleTripleDouble || w is SingleDoubleDouble) {
-        hasSingleTripleDoubleOrSingleDoubleDoubleWay = true;
-      }
-    }
-    for (Way w in d2Ways) {
-      if (w is SingleTripleDouble || w is SingleDoubleDouble) {
-        hasSingleTripleDoubleOrSingleDoubleDoubleWay = true;
-      }
-    }
-
-    indexesD1.clear();
-    for (int i = 0; i < d1Ways.length; i++) {
-      if (hasSingleTripleDoubleOrSingleDoubleDoubleWay &&
-          !(d1Ways[i] is! SingleTripleDouble ||
-              d1Ways[i] is! SingleDoubleDouble)) {
-        indexesD1.add(i);
-      }
-    }
-
-    indexesD2.clear();
-    for (int i = 0; i < d2Ways.length; i++) {
-      if (hasSingleTripleDoubleOrSingleDoubleDoubleWay &&
-          !(d2Ways[i] is! SingleTripleDouble ||
-              d2Ways[i] is! SingleDoubleDouble)) {
-        indexesD2.add(i);
-      }
-    }
-
-    for (int i = 0; i < indexesD1.length; i++) {
-      d1Ways.removeAt(indexesD1[i] - i);
-    }
-
-    for (int i = 0; i < indexesD2.length; i++) {
-      d2Ways.removeAt(indexesD2[i] - i);
-    }
-
-    if (hasSingleTripleDoubleOrSingleDoubleDoubleWay) {
-      for (Way w in d1Ways) {
-        resultsd1.add(w.convertToString());
-      }
-
-      for (Way w in d2Ways) {
-        resultsd2.add(w.convertToString());
-      }
-      results.add(resultsd1);
-      results.add(resultsd2);
-      return results;
-    }
-
-    //---------------Triple Triple Double  Triple Double Double Way--------------//
-
-    bool hasTripleTripleDoubleOrTripleDoubleDoubleWay = false;
-
-    if (_finishes[_score] is TripleTripleDouble ||
-        _finishes[_score] is TripleDoubleDouble) {
-      hasSingleTripleDoubleOrSingleDoubleDoubleWay = true;
-    }
-
-    for (Way w in d1Ways) {
-      if (w is TripleTripleDouble || w is TripleDoubleDouble) {
-        hasTripleTripleDoubleOrTripleDoubleDoubleWay = true;
-      }
-    }
-    for (Way w in d2Ways) {
-      if (w is TripleTripleDouble || w is TripleDoubleDouble) {
-        hasTripleTripleDoubleOrTripleDoubleDoubleWay = true;
-      }
-    }
-
-    indexesD1.clear();
-    for (int i = 0; i < d1Ways.length; i++) {
-      if (hasTripleTripleDoubleOrTripleDoubleDoubleWay &&
-          !(d1Ways[i] is! TripleTripleDouble ||
-              d1Ways[i] is! TripleDoubleDouble)) {
-        indexesD1.add(i);
-      }
-    }
-
-    indexesD2.clear();
-    for (int i = 0; i < d2Ways.length; i++) {
-      if (hasTripleTripleDoubleOrTripleDoubleDoubleWay &&
-          !(d2Ways[i] is! TripleTripleDouble ||
-              d2Ways[i] is! TripleDoubleDouble)) {
-        indexesD2.add(i);
-      }
-    }
-
-    for (int i = 0; i < indexesD1.length; i++) {
-      d1Ways.removeAt(indexesD1[i] - i);
-    }
-
-    for (int i = 0; i < indexesD2.length; i++) {
-      d2Ways.removeAt(indexesD2[i] - i);
-    }
-
-    if (hasTripleTripleDoubleOrTripleDoubleDoubleWay) {
-      for (Way w in d1Ways) {
-        resultsd1.add(w.convertToString());
-      }
-
-      for (Way w in d2Ways) {
-        resultsd2.add(w.convertToString());
-      }
-
-      List<int> removeIndexesD1 = [];
-      List<String> redundantStringsD1 = [];
-      for (int i = 0; i < resultsd1.length; i++) {
-        String item = resultsd1[i];
-
-        String a = item.substring(0, 3);
-        String b = item.substring(5, 8);
-
-        String s = b + "  " + a + "  " + "D" + d1.toString();
-        print(s);
-
-        if (resultsd1.contains(s) &&
-            !(a == b) &&
-            (!redundantStringsD1.contains(item))) {
-          removeIndexesD1.add(i);
-          redundantStringsD1.add(s);
-        }
-      }
-
-      List<int> removeIndexesD2 = [];
-      List<String> redundantStringsD2 = [];
-      for (int i = 0; i < resultsd2.length; i++) {
-        String item = resultsd2[i];
-
-        String a = item.substring(0, 3);
-        String b = item.substring(5, 8);
-
-        String s = b + "  " + a + "  " + "D" + d2.toString();
-        print(s);
-
-        if (resultsd2.contains(s) &&
-            !(a == b) &&
-            (!redundantStringsD2.contains(item))) {
-          removeIndexesD2.add(i);
-          redundantStringsD2.add(s);
-        }
-      }
-
-      for (int i = 0; i < removeIndexesD1.length; i++) {
-        resultsd1.removeAt(removeIndexesD1[i] - i);
-      }
-
-      for (int i = 0; i < removeIndexesD2.length; i++) {
-        resultsd2.removeAt(removeIndexesD2[i] - i);
-      }
-
-      results.add(resultsd1);
-      results.add(resultsd2);
-      return results;
-    }
-
+    results.add(resultsd1);
+    results.add(resultsd2);
     return results;
   }
 
-  List<Way> _calculateWaysForDouble(int num) {
+  List<Way> _calculateWaysForDouble(int num, Way standartWay) {
     List<Way> results = [];
 
-    if ((_score - num * 2) == 0) {
-      JustDouble res = JustDouble(finish: num);
-      results.add(res);
-    }
-
-    for (int i = 20; i > 0; i--) {
-      if ((_score - (i + num * 2)) == 0) {
-        SingleDouble res = SingleDouble(prepare: i, finish: num);
-        results.add(res);
-      }
-    }
-
-    for (int i = 20; i > 0; i--) {
-      if ((_score - (i * 3 + num * 2)) == 0) {
-        TripleDouble res = TripleDouble(prepare: i, finish: num);
-        results.add(res);
-      }
-    }
-
-    for (int i = 20; i > 0; i--) {
-      if ((_score - (i * 2 + num * 2)) == 0) {
-        DoubleDouble res = DoubleDouble(prepare: i, finish: num);
-        results.add(res);
-      }
-    }
-
-    for (int i = 20; i > 0; i--) {
-      for (int j = 20; j > 0; j--) {
-        if ((_score - (i + j * 3 + num * 2)) == 0) {
-          SingleTripleDouble res =
-              SingleTripleDouble(prepare1: i, prepare2: j, finish: num);
+    if (standartWay is SingleDouble) {
+      for (int i = 20; i > 0; i--) {
+        if ((_score - (i + num * 2)) == 0) {
+          SingleDouble res = SingleDouble(prepare: i, finish: num);
           results.add(res);
         }
       }
     }
 
-    for (int i = 20; i > 0; i--) {
-      for (int j = 20; j > 0; j--) {
-        if ((_score - (i + j * 2 + num * 2)) == 0) {
-          SingleDoubleDouble res =
-              SingleDoubleDouble(prepare1: i, prepare2: j, finish: num);
+    if (standartWay is TripleDouble) {
+      for (int i = 20; i > 0; i--) {
+        if ((_score - (i * 3 + num * 2)) == 0) {
+          TripleDouble res = TripleDouble(prepare: i, finish: num);
           results.add(res);
         }
       }
     }
 
-    for (int i = 20; i > 9; i--) {
-      for (int j = 20; j > 9; j--) {
-        if ((_score - (i * 3 + j * 3 + num * 2)) == 0) {
-          TripleTripleDouble res =
-              TripleTripleDouble(prepare1: i, prepare2: j, finish: num);
-          results.add(res);
+    if (standartWay is SingleTripleDouble) {
+      for (int i = 20; i > 0; i--) {
+        for (int j = 20; j > 0; j--) {
+          if ((_score - (i + j * 3 + num * 2)) == 0) {
+            SingleTripleDouble res =
+                SingleTripleDouble(prepare1: i, prepare2: j, finish: num);
+            results.add(res);
+          }
         }
       }
     }
 
-    for (int i = 20; i > 9; i--) {
-      for (int j = 20; j > 9; j--) {
-        if ((_score - (i * 3 + j * 2 + num * 2)) == 0) {
-          TripleDoubleDouble res =
-              TripleDoubleDouble(prepare1: i, prepare2: j, finish: num);
-          results.add(res);
+    if (standartWay is TripleTripleDouble) {
+      for (int i = 20; i > 0; i--) {
+        for (int j = 20; j > 0; j--) {
+          if ((_score - (i * 3 + j * 3 + num * 2)) == 0) {
+            TripleTripleDouble res =
+                TripleTripleDouble(prepare1: i, prepare2: j, finish: num);
+            results.add(res);
+          }
         }
       }
     }
+
     return results;
   }
 
