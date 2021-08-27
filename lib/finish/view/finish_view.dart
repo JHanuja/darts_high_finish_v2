@@ -79,9 +79,12 @@ class _FinishViewContentState extends State<FinishViewContent> {
         }
       },
       child: Scaffold(
-          body: Column(
+          body: Container(
+            color: Theme.of(context).backgroundColor,
+            child: Column(
         children: [Score(), WaysWaitKeyboard()],
-      )),
+      ),
+          )),
     );
   }
 }

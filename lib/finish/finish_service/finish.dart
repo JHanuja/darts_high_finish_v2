@@ -129,8 +129,19 @@ class Finish {
     _standartWay = _calculateStandartWay();
     if (_standartWay != "") {
       List<List<String>> l = _calculateWaysFilteredForDouble();
+
       _waysD1 = (l.isNotEmpty && _score > 60) ? l.elementAt(0) : [];
       _waysD2 = (l.length == 2 && _score > 60) ? l.elementAt(1) : [];
+
+      if (_waysD1.contains(_standartWay)) {
+        _waysD1.remove(_standartWay);
+      }
+
+      if (_waysD2.contains(_standartWay)) {
+        _waysD2.remove(_standartWay);
+      }
+
+
     } else {
       _waysD1 = [];
       _waysD2 = [];
@@ -159,7 +170,6 @@ class Finish {
       String b = item.substring(5, 8);
 
       String s = b + "  " + a + "  " + "D" + d1.toString();
-    
 
       if (resultsd1.contains(s) &&
           !(a == b) &&
@@ -178,7 +188,6 @@ class Finish {
       String b = item.substring(5, 8);
 
       String s = b + "  " + a + "  " + "D" + d2.toString();
-
 
       if (resultsd2.contains(s) &&
           !(a == b) &&
