@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
 import 'package:darts_high_finish_v2/finish/cubit/wait_ways_cubit.dart';
+import 'package:darts_high_finish_v2/theme/cubit/theme_cubit.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -17,3 +18,6 @@ class FakeTopState extends Fake implements TopState {}
 
 class MockWaitWaysCubit extends MockBloc<WaitWaysCubit,int> implements WaitWaysCubit{}
 
+class MockThemeCubit extends MockBloc<ThemeCubit, ThemeState> implements ThemeCubit {}
+
+class FakeThemeState extends Fake implements ThemeState {}

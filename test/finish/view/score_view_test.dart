@@ -1,5 +1,6 @@
 import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
 import 'package:darts_high_finish_v2/finish/view/score_view.dart';
+import 'package:darts_high_finish_v2/theme/cubit/theme_cubit.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,18 +9,18 @@ import 'package:mocktail/mocktail.dart';
 
 import 'helper.dart';
 
-
-
-
 extension on WidgetTester {
-  Future<void> pumpWidgetWithTopCubitFinishBloc(
-      TopCubit topCubit, FinishBloc finishBloc, Widget child) {
+  Future<void> pumpWidgetWithTopCubitFinishBloc(TopCubit topCubit,
+      FinishBloc finishBloc, ThemeCubit themeCubit, Widget child) {
     return pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: BlocProvider.value(
             value: topCubit,
-            child: BlocProvider.value(value: finishBloc, child: child),
+            child: BlocProvider.value(
+              value: themeCubit,
+              child: BlocProvider.value(value: finishBloc, child: child),
+            ),
           ),
         ),
       ),
@@ -27,23 +28,24 @@ extension on WidgetTester {
   }
 }
 
-
-
 void main() {
   late FinishBloc finishBloc;
   late TopCubit topCubit;
+  late ThemeCubit themeCubit;
 
   setUpAll(() {
     registerFallbackValue<FinishState>(FakeFinishState());
     registerFallbackValue<FinishEvent>(FakeFinishEvent());
     registerFallbackValue<TopState>(FakeTopState());
     registerFallbackValue<TopCubit>(TopCubit());
-
+    registerFallbackValue<ThemeCubit>(ThemeCubit());
+    registerFallbackValue<ThemeState>(LightTheme());
   });
 
   setUp(() {
     finishBloc = MockFinishBloc();
     topCubit = MockTopCubit();
+    themeCubit = MockThemeCubit();
   });
 
   group('Score View Rendered', () {
@@ -63,8 +65,9 @@ void main() {
             value2: 5.0,
             value3: 5.0,
             value4: 5.0));
+        when(() => themeCubit.state).thenReturn(LightTheme());
         await tester.pumpWidgetWithTopCubitFinishBloc(
-            topCubit, finishBloc, Score());
+            topCubit, finishBloc, themeCubit, Score());
         expect(find.text('100'), findsOneWidget);
       },
     );
