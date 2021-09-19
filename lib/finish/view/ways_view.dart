@@ -10,7 +10,7 @@ class Ways extends StatelessWidget {
       builder: (context, state) {
         return Container(
           color: Theme.of(context).backgroundColor,
-          height: context.read<TopCubit>().state.safeAreaHeight * 0.8,
+          height: context.read<TopCubit>().state.safeAreaHeight * 0.7,
           width: context.read<TopCubit>().state.width,
           child: Column(
             children: buildList(context, state),

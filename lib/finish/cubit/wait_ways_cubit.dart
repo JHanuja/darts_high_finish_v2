@@ -3,7 +3,14 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 
 class WaitWaysCubit extends Cubit<int> {
-  WaitWaysCubit() : super(0);
+  final int durationWait;
+  final int durationWays;
+  final int active;
+
+  WaitWaysCubit({required this.active})
+      : durationWait = 2,
+        durationWays = 2,
+        super(active);
 
   late Timer t;
   late Timer k;
@@ -11,18 +18,17 @@ class WaitWaysCubit extends Cubit<int> {
   bool tInitialized = false;
   bool kInitialized = false;
 
-  void startTimer() {
+  Future<void> startTimer() async {
+    if (active == 2) {
+      emit(active);
+      return;
+    }
     emit(0);
-    tInitialized = true;
-    t = Timer(const Duration(seconds: 5), () {
-      
-      emit(1);
-      kInitialized = true;
-      k = Timer(const Duration(seconds: 10), () {
-        
-        emit(2);
-      });
-    });
+    await Future.delayed(const Duration(seconds: 4));
+    emit(1);
+    await Future.delayed(const Duration(seconds: 6));
+    emit(2);
+    return;
   }
 
   @override

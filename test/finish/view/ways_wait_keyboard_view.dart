@@ -1,4 +1,5 @@
 import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
+import 'package:darts_high_finish_v2/finish/finish_service/finish.dart';
 import 'package:darts_high_finish_v2/finish/view/ways_wait_keyboard_view.dart';
 import 'package:darts_high_finish_v2/finish/view/ways_wait_view.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
@@ -25,8 +26,6 @@ extension on WidgetTester {
   }
 }
 
-
-
 void main() {
   late FinishBloc finishBloc;
   late TopCubit topCubit;
@@ -36,7 +35,6 @@ void main() {
     registerFallbackValue<FinishEvent>(FakeFinishEvent());
     registerFallbackValue<TopState>(FakeTopState());
     registerFallbackValue<TopCubit>(TopCubit());
-
   });
 
   setUp(() {
@@ -45,10 +43,12 @@ void main() {
   });
 
   group('Ways Wait Keyboard View Rendered', () {
+    Finish finish = Finish(d1:20,d2:18,gameMode: 3,setModeLegMode: false, legsToWinMatch: 5,setsToWinMatch: 3,legsToWinSet: 3);
     testWidgets(
       "Ways Wait Keyboard View Rendered",
       (WidgetTester tester) async {
-        when(() => finishBloc.state).thenReturn(FinishInRange(score: 100, average: 34.0, dartsNeeded: 6, standartWay: "T20 D20", waysD1: [], waysD2: [], d1: 18, d2: 16, error: false, scoreEntered: 10));
+        when(() => finishBloc.state).thenReturn(
+            FinishInRange(finish: finish, error: false, scoreEntered: 10));
         when(() => topCubit.state).thenReturn(TopState(
             safeAreaHeight: 700,
             width: 300,

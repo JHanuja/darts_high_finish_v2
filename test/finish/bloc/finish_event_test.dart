@@ -10,7 +10,7 @@ void main() {
     });
     group('GameReset', () {
       test('support value comparison', () {
-        expect(GameReset(), GameReset());
+        expect(GameNextLeg(), GameNextLeg());
       });
     });
     group('Score Entered', () {

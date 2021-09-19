@@ -1,80 +1,73 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
 import 'package:darts_high_finish_v2/finish/cubit/wait_ways_cubit.dart';
+import 'package:darts_high_finish_v2/finish/finish_service/finish.dart';
+import 'package:darts_high_finish_v2/finish/finish_service/throw.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../view/helper.dart';
+
 void main() {
+
+  /*
   group('FinishBloc', () {
+    
+
     test('initialStateIsFinishInitial', () {
-      expect(FinishBloc(cubit: WaitWaysCubit(),gameMode: 1, d1: 20, d2: 18).state, FinishInitial());
+      expect(FinishBloc(waitWaysCubit: WaitWaysCubit(), finish: FakeFinish()).state,
+          FinishInitial(false, FakeFinish()));
     });
     blocTest<FinishBloc, FinishState>('checks Game Start works Out of Range',
-        build: () => FinishBloc(cubit: WaitWaysCubit(), gameMode: 3, d1: 20, d2: 18),
+        build: () => FinishBloc(waitWaysCubit: WaitWaysCubit(), finish: FakeFinish()),
         act: (bloc) => bloc.add(const GameStarted()),
-        expect: () => [
-              FinishOutOfRange(
-                  scoreEntered: 0,
-                  dartsNeeded: 0, average: 0.0, score: 301, error: false)
-            ]);
+        expect: () =>
+            [FinishOutOfRange(scoreEntered: 0, finish: FakeFinish(), error: false)]);
     blocTest<FinishBloc, FinishState>('checks Update Score',
-        build: () => FinishBloc(cubit: WaitWaysCubit(),gameMode: 3, d1: 20, d2: 18),
+        build: () => FinishBloc(waitWaysCubit: WaitWaysCubit(), finish: FakeFinish()),
         act: (bloc) {
           bloc.add(const GameStarted());
           bloc.add(const ScoreEntered(score: 131, dartsNeeded: 3));
           bloc.add(const ScoreEntered(score: 200, dartsNeeded: 3));
         },
         expect: () => [
-              FinishOutOfRange(
-                scoreEntered: 0,
-                  dartsNeeded: 0, average: 0.0, score: 301, error: false),
+              FinishOutOfRange(scoreEntered: 0, finish: FakeFinish(), error: false),
               FinishInRange(
                 scoreEntered: 131,
-                  dartsNeeded: 3,
-                  average: 131.0,
-                  error: false,
-                  score: 170,
-                  standartWay: "T20  T20  Bull",
-                  waysD1: [],
-                  waysD2: [],
-                  d1: 20,
-                  d2: 18),
+                finish: FakeFinish(),
+                error: false,
+              ),
               FinishInRange(
                 scoreEntered: 200,
-                  dartsNeeded: 3,
-                  average: 131.0,
-                  error: true,
-                  score: 170,
-                  standartWay: "T20  T20  Bull",
-                  waysD1: [],
-                  waysD2: [],
-                  d1: 20,
-                  d2: 18)
+                finish: FakeFinish(),
+                error: true,
+              )
             ]);
-    blocTest<FinishBloc, FinishState>('checks Reset Match Works',
-        build: () => FinishBloc(cubit: WaitWaysCubit(), d1: 20, d2: 18, gameMode: 3),
+    
+    
+    blocTest<FinishBloc, FinishState>('checks Next Leg Works',
+        build: () => FinishBloc(waitWaysCubit: WaitWaysCubit(), finish: Finish(d1: 20,d2:18,gameMode: 3)),
         act: (bloc) {
           bloc.add(const GameStarted());
           bloc.add(const ScoreEntered(score: 131, dartsNeeded: 3));
-          bloc.add(GameReset());
+          bloc.add(const ScoreEntered(score: 170, dartsNeeded: 3));
+          bloc.add(GameNextLeg());
         },
         expect: () => [
-              FinishOutOfRange(
-                scoreEntered: 0,
-                  dartsNeeded: 0, average: 0.0, score: 301, error: false),
+              FinishOutOfRange(scoreEntered: 0, finish: FakeFinish(), error: false),
               FinishInRange(
-                  scoreEntered: 131,
-                  dartsNeeded: 3,
-                  average: 131.0,
-                  error: false,
-                  score: 170,
-                  standartWay: "T20  T20  Bull",
-                  waysD1: [],
-                  waysD2: [],
-                  d1: 20,
-                  d2: 18),
-              FinishOutOfRange(
-                  scoreEntered: 0,
-                  dartsNeeded: 0, average: 131.0, score: 301, error: false),
+                scoreEntered: 131,
+                finish: FakeFinish(),
+                error: false,
+              ),
+              LegFinished(
+                scoreEntered: 170,
+                finish: FakeFinish(),
+                error: false,
+              ),
+              FinishOutOfRange(scoreEntered: 0, finish: FakeFinish(), error: false),
             ]);
+            
   });
+  */
+  
 }

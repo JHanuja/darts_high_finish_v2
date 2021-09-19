@@ -1,3 +1,4 @@
+import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
 import 'package:darts_high_finish_v2/finish/cubit/wait_ways_cubit.dart';
 import 'package:darts_high_finish_v2/finish/view/keyboard_view.dart';
 import 'package:darts_high_finish_v2/finish/view/wait_view.dart';
@@ -11,6 +12,7 @@ class WaysWait extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WaitWaysCubit, int>(
+      bloc: context.read<FinishBloc>().activeWaitWaysCubit,
       builder: (context, state) {
         switch (state) {
           case 0:

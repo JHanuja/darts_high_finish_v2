@@ -6,7 +6,7 @@ class Wait extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: context.read<TopCubit>().state.safeAreaHeight * 0.8,
+        height: context.read<TopCubit>().state.safeAreaHeight * 0.7,
         color: Theme.of(context).backgroundColor);
   }
 }

@@ -3,22 +3,33 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:darts_high_finish_v2/finish/cubit/wait_ways_cubit.dart';
 import 'package:darts_high_finish_v2/finish/finish_service/finish.dart';
+import 'package:darts_high_finish_v2/x01GameProperties/player.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 part 'finish_event.dart';
 part 'finish_state.dart';
 
 class FinishBloc extends Bloc<FinishEvent, FinishState> {
-  final Finish finish;
-  final WaitWaysCubit cubit;
+  final List<Finish> finishes;
+  final List<WaitWaysCubit> waitWaysCubits;
+  final List<Player> players;
+  late Finish activeFinish;
+  late WaitWaysCubit activeWaitWaysCubit;
 
-  FinishBloc(
-      {required int d1,
-      required int d2,
-      required int gameMode,
-      required this.cubit})
-      : finish = Finish(d1: d1, d2: d2, gameMode: gameMode),
-        super(FinishInitial());
+  late int numberOfPlayers;
+  late int scoreUpdates;
+
+  FinishBloc({
+    required this.finishes,
+    required this.waitWaysCubits,
+    required this.players,
+  }) : super(FinishInitial(false, finishes[0])) {
+    activeFinish = finishes[0];
+    activeWaitWaysCubit = waitWaysCubits[0];
+    numberOfPlayers = finishes.length;
+    scoreUpdates = 0;
+  }
 
   @override
   Stream<FinishState> mapEventToState(
@@ -30,8 +41,8 @@ class FinishBloc extends Bloc<FinishEvent, FinishState> {
     if (event is ScoreEntered) {
       yield* _mapScoreEnteredToState(event);
     }
-    if (event is GameReset) {
-      yield* _mapGameResetToState(event);
+    if (event is GameNextLeg) {
+      yield* _mapGameNextLegToState(event);
     }
     if (event is ScoreReset) {
       yield* _mapScoreResetToState(event);
@@ -39,117 +50,92 @@ class FinishBloc extends Bloc<FinishEvent, FinishState> {
   }
 
   Stream<FinishState> _mapGameStartedToState(GameStarted event) async* {
-    if (finish.score >= 60 && finish.score <= 170) {
-      cubit.startTimer();
+    if (activeFinish.score >= 60 && activeFinish.score <= 170) {
+      activeWaitWaysCubit.startTimer();
       yield (FinishInRange(
-          scoreEntered: 0,
-          average: finish.average,
-          dartsNeeded: finish.dartsNeededForLeg,
-          error: false,
-          d1: finish.d1,
-          d2: finish.d2,
-          score: finish.score,
-          standartWay: finish.standartWay,
-          waysD1: finish.waysD1,
-          waysD2: finish.waysD2));
+          scoreEntered: 0, error: false, finish: activeFinish));
     } else {
       yield (FinishOutOfRange(
-        scoreEntered: 0,
-        score: finish.score,
-        error: false,
-        average: finish.average,
-        dartsNeeded: finish.dartsNeededForLeg,
-      ));
+          scoreEntered: 0, error: false, finish: activeFinish));
     }
   }
 
   Stream<FinishState> _mapScoreEnteredToState(ScoreEntered event) async* {
-    if (finish.updateScore(event.score, event.dartsNeeded)) {
-      if (finish.score >= 60 && finish.score <= 170) {
+    if (activeFinish.updateScore(event.score, event.dartsNeeded)) {
+      if (activeFinish.score >= 60 && activeFinish.score <= 170) {
         if (event.score > 0) {
-          cubit.startTimer();
+          print('update Score');
+          activeWaitWaysCubit.startTimer().then((value) {
+            scoreUpdates += 1;
+            activeFinish = finishes[scoreUpdates % numberOfPlayers];
+            activeWaitWaysCubit =
+                waitWaysCubits[scoreUpdates % numberOfPlayers];
+          });
+          
         }
         yield (FinishInRange(
-            scoreEntered: event.score,
-            average: finish.average,
-            dartsNeeded: finish.dartsNeededForLeg,
-            error: false,
-            d1: finish.d1,
-            d2: finish.d2,
-            score: finish.score,
-            standartWay: finish.standartWay,
-            waysD1: finish.waysD1,
-            waysD2: finish.waysD2));
+            scoreEntered: event.score, error: false, finish: activeFinish));
       } else {
-        yield (FinishOutOfRange(
-            scoreEntered: event.score,
-            average: finish.average,
-            dartsNeeded: finish.dartsNeededForLeg,
-            score: finish.score,
-            error: false));
+        if (activeFinish.score != 0) {
+          yield (FinishOutOfRange(
+              scoreEntered: event.score, finish: activeFinish, error: false));
+          scoreUpdates += 1;
+          activeFinish = finishes[scoreUpdates % numberOfPlayers];
+          activeWaitWaysCubit = waitWaysCubits[scoreUpdates % numberOfPlayers];
+        } else {
+          scoreUpdates += 1;
+          activeFinish = finishes[scoreUpdates % numberOfPlayers];
+          activeWaitWaysCubit = waitWaysCubits[scoreUpdates % numberOfPlayers];
+          print('ioefheiohfoeihfoiewhioehfohewoihoiweghoiweghowegh');
+          for (Finish f in finishes) {
+            print(f.score);
+          }
+
+          yield LegFinished(
+              error: false, finish: activeFinish, scoreEntered: event.score);
+        }
       }
     } else {
-      if (finish.score >= 60 && finish.score <= 170) {
+      if (activeFinish.score >= 60 && activeFinish.score <= 170) {
         yield (FinishInRange(
-            scoreEntered: event.score,
-            average: finish.average,
-            dartsNeeded: finish.dartsNeededForLeg,
-            error: true,
-            d1: finish.d1,
-            d2: finish.d2,
-            score: finish.score,
-            standartWay: finish.standartWay,
-            waysD1: finish.waysD1,
-            waysD2: finish.waysD2));
+            scoreEntered: event.score, error: true, finish: activeFinish));
+        scoreUpdates += 1;
+        activeFinish = finishes[scoreUpdates % numberOfPlayers];
+        activeWaitWaysCubit = waitWaysCubits[scoreUpdates % numberOfPlayers];
       } else {
         yield (FinishOutOfRange(
-            scoreEntered: event.score,
-            average: finish.average,
-            dartsNeeded: finish.dartsNeededForLeg,
-            score: finish.score,
-            error: true));
+            scoreEntered: event.score, finish: activeFinish, error: true));
+        scoreUpdates += 1;
+        activeFinish = finishes[scoreUpdates % numberOfPlayers];
+        activeWaitWaysCubit = waitWaysCubits[scoreUpdates % numberOfPlayers];
       }
     }
+    print('fahnsdofhoaehfoie');
   }
 
-  Stream<FinishState> _mapGameResetToState(GameReset event) async* {
-    finish.resetMatch();
-    if (finish.score >= 60 && finish.score <= 170) {
+  Stream<FinishState> _mapGameNextLegToState(GameNextLeg event) async* {
+    activeFinish.nextLeg();
+    if (activeFinish.score >= 60 && activeFinish.score <= 170) {
       yield (FinishInRange(
-          scoreEntered: 0,
-          average: finish.average,
-          dartsNeeded: finish.dartsNeededForLeg,
-          error: false,
-          d1: finish.d1,
-          d2: finish.d2,
-          score: finish.score,
-          standartWay: finish.standartWay,
-          waysD1: finish.waysD1,
-          waysD2: finish.waysD2));
+          scoreEntered: 0, error: false, finish: activeFinish));
     } else {
       yield (FinishOutOfRange(
-          scoreEntered: 0,
-          average: finish.average,
-          dartsNeeded: finish.dartsNeededForLeg,
-          score: finish.score,
-          error: false));
+          scoreEntered: 0, finish: activeFinish, error: false));
     }
   }
 
   Stream<FinishState> _mapScoreResetToState(ScoreReset event) async* {
-    if (finish.resetScore()) {
+    if (activeFinish.resetScore()) {
       yield FinishOutOfRange(
-          score: finish.score,
-          error: false,
-          average: finish.average,
-          dartsNeeded: finish.dartsNeededForLeg,
-          scoreEntered: 0);
+          error: false, finish: activeFinish, scoreEntered: 0);
     }
   }
 
   @override
   Future<void> close() {
-    cubit.close();
+    for (WaitWaysCubit w in waitWaysCubits) {
+      w.close();
+    }
     return super.close();
   }
 }

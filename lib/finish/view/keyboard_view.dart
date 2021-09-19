@@ -1,6 +1,7 @@
 import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
 import 'package:darts_high_finish_v2/finish/cubit/darts_needed_cubit.dart';
 import 'package:darts_high_finish_v2/finish/cubit/score_entered_cubit.dart';
+import 'package:darts_high_finish_v2/finish/finish_service/finish.dart';
 import 'package:darts_high_finish_v2/theme/cubit/theme_cubit.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
 import 'package:flutter/material.dart';
@@ -12,80 +13,17 @@ class Keyboard extends StatelessWidget {
     return BlocBuilder<FinishBloc, FinishState>(
       builder: (context, state) {
         return Container(
-          height: context.read<TopCubit>().state.safeAreaHeight * 0.8,
+          height: context.read<TopCubit>().state.safeAreaHeight * 0.7,
           child: Column(
             children: [
               Container(
+                height: context.read<TopCubit>().state.safeAreaHeight * 0.1,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                 ),
-                height: context.read<TopCubit>().state.safeAreaHeight * 0.2,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: context.read<TopCubit>().state.width,
-                    ),
-                    Positioned(
-                      left: context.read<TopCubit>().state.width * 0.07,
-                      top: context.read<TopCubit>().state.safeAreaHeight * 0.11,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                            color: Theme.of(context).backgroundColor),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            'Darts Needed Leg:  ' + state.dartsNeeded.toString(),
-                            style: TextStyle(
-                                color: Theme.of(context).cardColor,
-                                fontSize:
-                                    context.read<TopCubit>().state.value3),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: context.read<TopCubit>().state.width * 0.07,
-                      //top: context.read<TopCubit>().state.safeAreaHeight * 0.2,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                            color: Theme.of(context).backgroundColor),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            'Av Leg:  ' + state.average.toStringAsFixed(2),
-                            style: TextStyle(
-                                color: Theme.of(context).cardColor,
-                                fontSize:
-                                    context.read<TopCubit>().state.value3),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: context.read<TopCubit>().state.width * 0.07,
-                      //top: context.read<TopCubit>().state.safeAreaHeight * 0.04,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                            color: Theme.of(context).backgroundColor),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            'Av Match:  ' + state.average.toStringAsFixed(2),
-                            style: TextStyle(
-                                color: Theme.of(context).cardColor,
-                                fontSize:
-                                    context.read<TopCubit>().state.value3),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Row(
+                  children: createAverageWidget(
+                      context.read<FinishBloc>().finishes, context),
                 ),
               ),
               Container(
@@ -107,6 +45,44 @@ class Keyboard extends StatelessWidget {
         );
       },
     );
+  }
+
+  List<Widget> createAverageWidget(
+      List<Finish> finishes, BuildContext context) {
+    List<Widget> l = [];
+
+    if (finishes.length <= 2) {
+      for (int i = 0; i < finishes.length; i++) {
+        String avMatchString = (finishes[i].average != -1)
+            ? finishes[i].average.toStringAsFixed(0)
+            : '-';
+        String avLegString = (finishes[i].averageLeg != -1)
+            ? finishes[i].averageLeg.toStringAsFixed(0)
+            : '-';
+        l.add(
+          Expanded(
+            child: Container(
+              child: Center(
+                  child: Text(
+                'Match: ' + avMatchString + '   Leg: ' + avLegString,
+                style: TextStyle(
+                    color: Theme.of(context).backgroundColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: context.read<TopCubit>().state.value2 * 1.2),
+              )),
+            ),
+          ),
+        );
+        if (i == 0 && finishes.length > 1) {
+          l.add(Container(
+            color: Theme.of(context).hoverColor,
+            width: 2.0,
+          ));
+        }
+      }
+    }
+
+    return l;
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
+import 'package:darts_high_finish_v2/finish/finish_service/finish.dart';
 import 'package:darts_high_finish_v2/finish/view/score_view.dart';
 import 'package:darts_high_finish_v2/theme/cubit/theme_cubit.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
@@ -49,14 +50,14 @@ void main() {
   });
 
   group('Score View Rendered', () {
+    Finish finish = Finish(d1: 20, d2: 18, gameMode: 3,setModeLegMode: false, legsToWinMatch: 5,setsToWinMatch: 3,legsToWinSet: 3);;
+
     testWidgets(
       "Score View Rendered",
       (WidgetTester tester) async {
         when(() => finishBloc.state).thenReturn(FinishOutOfRange(
-            score: 100,
             error: false,
-            average: 100.0,
-            dartsNeeded: 3,
+            finish: finish,
             scoreEntered: 100));
         when(() => topCubit.state).thenReturn(TopState(
             safeAreaHeight: 700,
@@ -68,7 +69,7 @@ void main() {
         when(() => themeCubit.state).thenReturn(LightTheme());
         await tester.pumpWidgetWithTopCubitFinishBloc(
             topCubit, finishBloc, themeCubit, Score());
-        expect(find.text('100'), findsOneWidget);
+        expect(find.text('301'), findsOneWidget);
       },
     );
   });
