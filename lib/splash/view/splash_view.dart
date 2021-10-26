@@ -1,7 +1,8 @@
-import 'package:darts_high_finish_v2/doubles/view/doubles_view.dart';
+
 import 'package:darts_high_finish_v2/splash/cubit/splash_cubit.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
 import 'package:darts_high_finish_v2/top/view/top_view.dart';
+import 'package:darts_high_finish_v2/x01GameProperties/view/x01_game_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,7 +54,7 @@ class _SplashViewState extends State<SplashView> {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) {
-                    return DoublesPage();
+                    return X01GamePropertiesView();
                   },
                 ),
               );

@@ -21,6 +21,10 @@ class GameStarted extends FinishEvent {
   const GameStarted();
 }
 
-class GameReset extends FinishEvent {
-  const GameReset();
+class GameNextLeg extends FinishEvent {
+  const GameNextLeg();
+}
+
+class GameFinished extends FinishEvent {
+  const GameFinished();
 }

@@ -1,28 +1,27 @@
 import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
-import 'package:darts_high_finish_v2/theme/cubit/theme_cubit.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
 import 'package:darts_high_finish_v2/x01GameProperties/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Score extends StatelessWidget {
+class NameWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    TopCubit topCubit = context.read<TopCubit>();
     return BlocBuilder<FinishBloc, FinishState>(
       builder: (context, state) {
         return Container(
-          color: Theme.of(context).primaryColor,
-          height: context.read<TopCubit>().state.safeAreaHeight * 0.2,
-          child: Row(
-            children: createScores(context.read<FinishBloc>().players, context)
-            ,
-          ),
-        );
+            height: topCubit.state.safeAreaHeight * 0.08,
+            color: Theme.of(context).backgroundColor,
+            child: Row(
+              children:
+                  createNames(context.read<FinishBloc>().players, context),
+            ));
       },
     );
   }
 
-  List<Widget> createScores(List<Player> players, BuildContext context) {
+  List<Widget> createNames(List<Player> players, BuildContext context) {
     List<Widget> l = [];
 
     if (players.length <= 2) {
@@ -32,17 +31,17 @@ class Score extends StatelessWidget {
             child: Container(
               child: Center(
                   child: Text(
-                
+                players[i].name +
+                    '(' +
                     context
                         .read<FinishBloc>()
                         .finishes[i]
-                        .score
-                        .toString() 
-                    ,
-               style: TextStyle(
-                      color: Theme.of(context).backgroundColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: context.read<TopCubit>().state.value4 * 2),
+                        .dartsNeededForLeg
+                        .toString() +
+                    ')',
+                style: TextStyle(
+                    color: Theme.of(context).cardColor,
+                    fontWeight: FontWeight.bold),
               )),
             ),
           ),
@@ -58,5 +57,4 @@ class Score extends StatelessWidget {
 
     return l;
   }
-
 }

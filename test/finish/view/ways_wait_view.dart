@@ -1,5 +1,6 @@
 import 'package:darts_high_finish_v2/finish/bloc/finish_bloc.dart';
 import 'package:darts_high_finish_v2/finish/cubit/wait_ways_cubit.dart';
+import 'package:darts_high_finish_v2/finish/finish_service/finish.dart';
 import 'package:darts_high_finish_v2/finish/view/ways_view.dart';
 import 'package:darts_high_finish_v2/finish/view/ways_wait_view.dart';
 import 'package:darts_high_finish_v2/top/cubit/top_cubit.dart';
@@ -49,18 +50,12 @@ void main() {
   });
 
   group('Ways View Rendered', () {
+    Finish finish = Finish(d1: 20, d2: 18, gameMode: 3,setModeLegMode: false, legsToWinMatch: 5,setsToWinMatch: 3,legsToWinSet: 3);
     testWidgets(
       "Ways View Rendered",
       (WidgetTester tester) async {
         when(() => finishBloc.state).thenReturn(FinishInRange(
-            score: 100,
-            average: 34.0,
-            dartsNeeded: 6,
-            standartWay: "T20 D20",
-            waysD1: [],
-            waysD2: [],
-            d1: 18,
-            d2: 16,
+            finish: finish,
             error: false,
             scoreEntered: 10));
         when(() => topCubit.state).thenReturn(TopState(
@@ -72,7 +67,7 @@ void main() {
             value4: 5.0));
         when(() => waitWaysCubit.state).thenReturn(1);
         await tester.pumpWidgetWithTopCubitFinishBloc(
-            topCubit, finishBloc,waitWaysCubit, WaysWait());
+            topCubit, finishBloc, waitWaysCubit, WaysWait());
         expect(find.byType(Ways), findsOneWidget);
       },
     );
