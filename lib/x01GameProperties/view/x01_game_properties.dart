@@ -25,7 +25,7 @@ class X01GameProperties extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             body: Container(
-              color: Theme.of(context).errorColor,
+              color: Theme.of(context).dividerColor,
               child: SingleChildScrollView(
                   child: Column(
                 children: [
@@ -41,22 +41,22 @@ class X01GameProperties extends StatelessWidget {
                           children: [
                             Players(topCubit),
                             Container(
-                              color: Theme.of(context).errorColor,
+                              color: Theme.of(context).dividerColor,
                               height: 0.5,
                             ),
                             StartingPoints(topCubit),
                             Container(
-                              color: Theme.of(context).errorColor,
+                              color: Theme.of(context).dividerColor,
                               height: 0.5,
                             ),
                             SetLegMode(topCubit),
                             Container(
-                              color: Theme.of(context).errorColor,
+                              color: Theme.of(context).dividerColor,
                               height: 0.5,
                             ),
                             LegsPerSet(topCubit),
                             Container(
-                              color: Theme.of(context).errorColor,
+                              color: Theme.of(context).dividerColor,
                               height: 0.5,
                             ),
                             GameLength(topCubit),
@@ -122,7 +122,7 @@ class WayTrainer extends StatelessWidget {
                 ),
               ),
               Container(
-                color: Theme.of(context).errorColor,
+                color: Theme.of(context).dividerColor,
                 width: 0.5,
               ),
               Expanded(
@@ -143,7 +143,7 @@ class WayTrainer extends StatelessWidget {
       );
       l.add(
         Container(
-          color: Theme.of(context).errorColor,
+          color: Theme.of(context).dividerColor,
           height: 0.5,
         ),
       );
@@ -182,7 +182,7 @@ class WayTrainer extends StatelessWidget {
               if (!doublesChoosen) {
                 errorMessage += ': Please select two Doubles';
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  backgroundColor: Theme.of(context).backgroundColor,
+                  backgroundColor: Theme.of(context).primaryColorDark,
                   content: Text(
                     errorMessage,
                     style: TextStyle(
@@ -207,7 +207,7 @@ class WayTrainer extends StatelessWidget {
             child: Container(
                 height: topCubit.state.safeAreaHeight * 0.1,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).primaryColorLight,
                   borderRadius: BorderRadius.all(
                     Radius.circular(10.0),
                   ),
@@ -252,7 +252,7 @@ class WayTrainer extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  color: Theme.of(context).errorColor,
+                  color: Theme.of(context).dividerColor,
                   width: 0.5,
                 ),
                 Expanded(
@@ -300,7 +300,7 @@ class WaySelector extends StatelessWidget {
                 },
                 child: Container(
                   color: (player.d1 == 20 || player.d2 == 20)
-                      ? Theme.of(context).accentColor
+                      ? Theme.of(context).primaryColorLight
                       : Theme.of(context).shadowColor,
                   child: Center(
                     child: Text('D20'),
@@ -309,7 +309,7 @@ class WaySelector extends StatelessWidget {
               ),
             ),
             Container(
-              color: Theme.of(context).errorColor,
+              color: Theme.of(context).dividerColor,
               width: 0.5,
             ),
             Expanded(
@@ -320,7 +320,7 @@ class WaySelector extends StatelessWidget {
                 },
                 child: Container(
                   color: (player.d1 == 18 || player.d2 == 18)
-                      ? Theme.of(context).accentColor
+                      ? Theme.of(context).primaryColorLight
                       : Theme.of(context).shadowColor,
                   child: Center(
                     child: Text('D18'),
@@ -329,7 +329,7 @@ class WaySelector extends StatelessWidget {
               ),
             ),
             Container(
-              color: Theme.of(context).errorColor,
+              color: Theme.of(context).dividerColor,
               width: 0.5,
             ),
             Expanded(
@@ -340,7 +340,7 @@ class WaySelector extends StatelessWidget {
                 },
                 child: Container(
                   color: (player.d1 == 16 || player.d2 == 16)
-                      ? Theme.of(context).accentColor
+                      ? Theme.of(context).primaryColorLight
                       : Theme.of(context).shadowColor,
                   child: Center(
                     child: Text('D16'),
@@ -349,7 +349,7 @@ class WaySelector extends StatelessWidget {
               ),
             ),
             Container(
-              color: Theme.of(context).errorColor,
+              color: Theme.of(context).dividerColor,
               width: 0.5,
             ),
             Expanded(
@@ -360,7 +360,7 @@ class WaySelector extends StatelessWidget {
                 },
                 child: Container(
                   color: (player.d1 == 14 || player.d2 == 14)
-                      ? Theme.of(context).accentColor
+                      ? Theme.of(context).primaryColorLight
                       : Theme.of(context).shadowColor,
                   child: Center(
                     child: Text('D14'),
@@ -369,7 +369,7 @@ class WaySelector extends StatelessWidget {
               ),
             ),
             Container(
-              color: Theme.of(context).errorColor,
+              color: Theme.of(context).dividerColor,
               width: 0.5,
             ),
             Expanded(
@@ -380,7 +380,7 @@ class WaySelector extends StatelessWidget {
                 },
                 child: Container(
                   color: (player.d1 == 12 || player.d2 == 12)
-                      ? Theme.of(context).accentColor
+                      ? Theme.of(context).primaryColorLight
                       : Theme.of(context).shadowColor,
                   child: Center(
                     child: Text('D12'),
@@ -434,12 +434,12 @@ class Players extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: topCubit.state.value3,
-                      color: Theme.of(context).errorColor),
+                      color: Theme.of(context).dividerColor),
                 ),
               ),
             ),
             Container(
-              color: Theme.of(context).errorColor,
+              color: Theme.of(context).dividerColor,
               width: 0.5,
             ),
             Expanded(
@@ -458,7 +458,7 @@ class Players extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Theme.of(context).accentColor),
+                                color: Theme.of(context).primaryColorLight),
                             child: IconButton(
                               icon: Icon(Icons.add),
                               onPressed: () {
@@ -621,12 +621,12 @@ class StartingPoints extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: topCubit.state.value3,
-                    color: Theme.of(context).errorColor),
+                    color: Theme.of(context).dividerColor),
               ),
             ),
           ),
           Container(
-            color: Theme.of(context).errorColor,
+            color: Theme.of(context).dividerColor,
             width: 0.5,
           ),
           Expanded(
@@ -769,12 +769,12 @@ class SetLegMode extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: topCubit.state.value3,
-                    color: Theme.of(context).errorColor),
+                    color: Theme.of(context).dividerColor),
               ),
             ),
           ),
           Container(
-            color: Theme.of(context).errorColor,
+            color: Theme.of(context).dividerColor,
             width: 0.5,
           ),
           Expanded(
@@ -794,7 +794,7 @@ class SetLegMode extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: topCubit.state.value3))),
                             color: state.setLegMode
-                                ? Theme.of(context).accentColor
+                                ? Theme.of(context).primaryColorLight
                                 : Theme.of(context).shadowColor))),
                 Expanded(
                     child: InkWell(
@@ -810,7 +810,7 @@ class SetLegMode extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: topCubit.state.value3))),
                             color: !state.setLegMode
-                                ? Theme.of(context).accentColor
+                                ? Theme.of(context).primaryColorLight
                                 : Theme.of(context).shadowColor))),
               ],
             ),
@@ -854,12 +854,12 @@ class LegsPerSet extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: topCubit.state.value3,
-                    color: Theme.of(context).errorColor),
+                    color: Theme.of(context).dividerColor),
               ),
             ),
           ),
           Container(
-            color: Theme.of(context).errorColor,
+            color: Theme.of(context).dividerColor,
             width: 0.5,
           ),
           Expanded(
@@ -982,12 +982,12 @@ class GameLength extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: topCubit.state.value3,
-                    color: Theme.of(context).errorColor),
+                    color: Theme.of(context).dividerColor),
               ),
             ),
           ),
           Container(
-            color: Theme.of(context).errorColor,
+            color: Theme.of(context).dividerColor,
             width: 0.5,
           ),
           Expanded(
@@ -1031,7 +1031,7 @@ class GameLength extends StatelessWidget {
                   ),
                 )),
                 Container(
-                  color: Theme.of(context).errorColor,
+                  color: Theme.of(context).dividerColor,
                   height: 0.5,
                 ),
                 Container(
@@ -1054,7 +1054,7 @@ class GameLength extends StatelessWidget {
                           child: Container(
                             width: topCubit.state.width * 0.07,
                             decoration: BoxDecoration(
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).primaryColorLight,
                                 shape: BoxShape.circle),
                             child: Center(
                               child: Text(
@@ -1089,7 +1089,7 @@ class GameLength extends StatelessWidget {
                           child: Container(
                             width: topCubit.state.width * 0.07,
                             decoration: BoxDecoration(
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).primaryColorLight,
                                 shape: BoxShape.circle),
                             child: Center(
                               child: Text(

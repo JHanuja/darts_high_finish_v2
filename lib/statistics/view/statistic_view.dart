@@ -152,13 +152,13 @@ class _StatisticViewState extends State<StatisticView> {
 
         return TopView(
           child: Container(
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).primaryColorDark,
             height: topCubit.state.safeAreaHeight,
             child: Column(
               children: [
                 Container(
                   height: topCubit.state.safeAreaHeight * 0.07,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).primaryColorLight,
                   child: Row(children: [
                     Container(
                       width: topCubit.state.width * 0.4,
@@ -257,7 +257,7 @@ class _StatisticViewState extends State<StatisticView> {
                             ),
                       Container(
                           height: topCubit.state.safeAreaHeight * 0.05,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).primaryColorLight,
                           child: Padding(
                             padding: EdgeInsets.only(
                                 left: topCubit.state.width * 0.05),
@@ -265,7 +265,7 @@ class _StatisticViewState extends State<StatisticView> {
                               alignment: Alignment.centerLeft,
                               child: Text('Average 3 Darts',
                                   style: TextStyle(
-                                      color: Theme.of(context).errorColor,
+                                      color: Theme.of(context).dividerColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize:
                                           context.read<TopCubit>().state.value3)),
@@ -342,7 +342,7 @@ class _StatisticViewState extends State<StatisticView> {
                       ),
                       Container(
                           height: topCubit.state.safeAreaHeight * 0.05,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).primaryColorLight,
                           child: Padding(
                             padding: EdgeInsets.only(
                                 left: topCubit.state.width * 0.05),
@@ -350,7 +350,7 @@ class _StatisticViewState extends State<StatisticView> {
                               alignment: Alignment.centerLeft,
                               child: Text('Records',
                                   style: TextStyle(
-                                      color: Theme.of(context).errorColor,
+                                      color: Theme.of(context).dividerColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize:
                                           context.read<TopCubit>().state.value3)),
@@ -542,7 +542,7 @@ class _StatisticViewState extends State<StatisticView> {
                       ),
                       Container(
                           height: topCubit.state.safeAreaHeight * 0.05,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).primaryColorLight,
                           child: Padding(
                             padding: EdgeInsets.only(
                                 left: topCubit.state.width * 0.05),
@@ -554,7 +554,7 @@ class _StatisticViewState extends State<StatisticView> {
                                     alignment: Alignment.centerLeft,
                                     child: Text('Scores',
                                         style: TextStyle(
-                                            color: Theme.of(context).errorColor,
+                                            color: Theme.of(context).dividerColor,
                                             fontWeight: FontWeight.bold,
                                             fontSize: context
                                                 .read<TopCubit>()
@@ -575,12 +575,12 @@ class _StatisticViewState extends State<StatisticView> {
                                         width: topCubit.state.width * 0.25,
                                         color: scores171
                                             ? Theme.of(context).shadowColor
-                                            : Theme.of(context).accentColor,
+                                            : Theme.of(context).primaryColorLight,
                                         child: Center(
                                           child: Text('171',
                                               style: TextStyle(
                                                   color: Theme.of(context)
-                                                      .errorColor,
+                                                      .dividerColor,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: context
                                                       .read<TopCubit>()
@@ -602,12 +602,12 @@ class _StatisticViewState extends State<StatisticView> {
                                       width: topCubit.state.width * 0.25,
                                       color: !scores171
                                           ? Theme.of(context).shadowColor
-                                          : Theme.of(context).accentColor,
+                                          : Theme.of(context).primaryColorLight,
                                       child: Center(
                                         child: Text('180',
                                             style: TextStyle(
                                                 color:
-                                                    Theme.of(context).errorColor,
+                                                    Theme.of(context).dividerColor,
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: context
                                                     .read<TopCubit>()
@@ -761,7 +761,7 @@ class _StatisticViewState extends State<StatisticView> {
                       (finishes[0].gameModeIs501 == 4)
                           ? Container(
                               height: topCubit.state.safeAreaHeight * 0.05,
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(context).primaryColorLight,
                               child: Padding(
                                 padding: EdgeInsets.only(
                                     left: topCubit.state.width * 0.05),
@@ -769,7 +769,7 @@ class _StatisticViewState extends State<StatisticView> {
                                   alignment: Alignment.centerLeft,
                                   child: Text('Darts to win',
                                       style: TextStyle(
-                                          color: Theme.of(context).errorColor,
+                                          color: Theme.of(context).dividerColor,
                                           fontWeight: FontWeight.bold,
                                           fontSize: context
                                               .read<TopCubit>()
@@ -1064,7 +1064,7 @@ class _StatisticViewState extends State<StatisticView> {
     list.add(finishes[0].legs > 1
         ? Container(
             height: topCubit.state.safeAreaHeight * 0.05,
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).primaryColorLight,
             child: Padding(
               padding: EdgeInsets.only(left: topCubit.state.width * 0.05),
               child: Row(
@@ -1075,7 +1075,7 @@ class _StatisticViewState extends State<StatisticView> {
                       alignment: Alignment.centerLeft,
                       child: Text('Legs',
                           style: TextStyle(
-                              color: Theme.of(context).errorColor,
+                              color: Theme.of(context).dividerColor,
                               fontWeight: FontWeight.bold,
                               fontSize: context.read<TopCubit>().state.value3)),
                     ),
@@ -1155,7 +1155,7 @@ class _StatisticViewState extends State<StatisticView> {
                           .legAverage
                           .toStringAsFixed(2),
                       style: TextStyle(
-                          color: Theme.of(context).errorColor,
+                          color: Theme.of(context).dividerColor,
                           fontWeight: finishes[i].legStatistics[j].won
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -1179,7 +1179,7 @@ class _StatisticViewState extends State<StatisticView> {
                           .legAverage
                           .toStringAsFixed(2),
                       style: TextStyle(
-                          color: Theme.of(context).errorColor,
+                          color: Theme.of(context).dividerColor,
                           fontWeight: finishes[i].setStatistic.legs[j].won
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -1294,7 +1294,7 @@ class _StatisticViewState extends State<StatisticView> {
   Widget createSetNumberWidget(int setNumber, TopCubit topCubit) {
     return Container(
       height: topCubit.state.safeAreaHeight * 0.05,
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).primaryColorLight,
       child: Padding(
         padding: EdgeInsets.only(left: topCubit.state.width * 0.05),
         child: Row(
@@ -1305,7 +1305,7 @@ class _StatisticViewState extends State<StatisticView> {
                 alignment: Alignment.centerLeft,
                 child: Text('Set ' + setNumber.toString(),
                     style: TextStyle(
-                        color: Theme.of(context).errorColor,
+                        color: Theme.of(context).dividerColor,
                         fontWeight: FontWeight.bold,
                         fontSize: context.read<TopCubit>().state.value3)),
               ),
@@ -1441,7 +1441,7 @@ class _StatisticViewState extends State<StatisticView> {
         child: Center(
             child: Text(finishes[i].name,
                 style: TextStyle(
-                    color: Theme.of(context).errorColor,
+                    color: Theme.of(context).dividerColor,
                     fontSize: context.read<TopCubit>().state.value3))),
       ));
     }
@@ -1455,7 +1455,7 @@ class _StatisticViewState extends State<StatisticView> {
         child: Center(
             child: Text(finishes[i].setStatistics[set].av.toStringAsFixed(2),
                 style: TextStyle(
-                    color: Theme.of(context).errorColor,
+                    color: Theme.of(context).dividerColor,
                     fontSize: context.read<TopCubit>().state.value3))),
       ));
     }

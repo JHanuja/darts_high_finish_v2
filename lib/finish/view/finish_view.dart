@@ -235,7 +235,7 @@ class _FinishViewContentState extends State<FinishViewContent> {
       },
       child: Scaffold(
           body: Container(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).primaryColorDark,
         child: Column(
           children: [NameWidget(), Score(), WaysWaitKeyboard()],
         ),

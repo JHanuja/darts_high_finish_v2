@@ -40,7 +40,7 @@ class Score extends StatelessWidget {
                         .toString() 
                     ,
                style: TextStyle(
-                      color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).primaryColorDark,
                       fontWeight: FontWeight.bold,
                       fontSize: context.read<TopCubit>().state.value4 * 2),
               )),

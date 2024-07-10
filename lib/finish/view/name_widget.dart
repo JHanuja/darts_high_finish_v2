@@ -12,7 +12,7 @@ class NameWidget extends StatelessWidget {
       builder: (context, state) {
         return Container(
             height: topCubit.state.safeAreaHeight * 0.08,
-            color: Theme.of(context).backgroundColor,
+            color: Theme.of(context).primaryColorDark,
             child: Row(
               children:
                   createNames(context.read<FinishBloc>().players, context),

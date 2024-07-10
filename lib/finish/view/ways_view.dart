@@ -9,7 +9,7 @@ class Ways extends StatelessWidget {
     return BlocBuilder<FinishBloc, FinishState>(
       builder: (context, state) {
         return Container(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).primaryColorDark,
           height: context.read<TopCubit>().state.safeAreaHeight * 0.7,
           width: context.read<TopCubit>().state.width,
           child: Column(
@@ -60,7 +60,7 @@ class Ways extends StatelessWidget {
             child: Text(
               way,
               style: TextStyle(
-                  color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).primaryColorDark,
                   fontSize: context.read<TopCubit>().state.value4),
             ),
           ),

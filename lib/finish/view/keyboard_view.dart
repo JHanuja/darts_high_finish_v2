@@ -66,7 +66,7 @@ class Keyboard extends StatelessWidget {
                   child: Text(
                 'Match: ' + avMatchString + '   Leg: ' + avLegString,
                 style: TextStyle(
-                    color: Theme.of(context).backgroundColor,
+                    color: Theme.of(context).primaryColorDark,
                     fontWeight: FontWeight.bold,
                     fontSize: context.read<TopCubit>().state.value2 * 1.2),
               )),
@@ -93,7 +93,7 @@ class ScoreEnterer extends StatelessWidget {
       children: [
         Container(
           height: context.read<TopCubit>().state.safeAreaHeight * 0.15,
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).primaryColorDark,
           child: Row(
             children: [
               Container(
@@ -114,7 +114,7 @@ class ScoreEnterer extends StatelessWidget {
                           return Text(
                             state,
                             style: TextStyle(
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).primaryColorDark,
                               fontSize:
                                   context.read<TopCubit>().state.value3 * 1.5,
                             ),
@@ -141,7 +141,7 @@ class ScoreEnterer extends StatelessWidget {
                             context.read<FinishBloc>().add(ScoreReset()),
                         icon: Icon(
                           Icons.restart_alt,
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).primaryColorDark,
                         ),
                       ),
                     ),
@@ -156,7 +156,7 @@ class ScoreEnterer extends StatelessWidget {
             Container(
               height: context.read<TopCubit>().state.safeAreaHeight * 0.35,
               width: context.read<TopCubit>().state.width * 0.7,
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).primaryColorDark,
               child: Column(
                 children: [
                   Expanded(
@@ -352,7 +352,7 @@ class ScoreEnterer extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context).buttonColor,
+                                      color: Theme.of(context).indicatorColor,
                                     ),
                                     child: Center(
                                         child: Text(
@@ -404,7 +404,7 @@ class ScoreEnterer extends StatelessWidget {
                                   child: Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Theme.of(context).accentColor,
+                                      color: Theme.of(context).primaryColorLight,
                                     ),
                                     child: Center(
                                         child: Text(
@@ -456,7 +456,7 @@ class ScoreEnterer extends StatelessWidget {
                                     child: Text('1',
                                         style: TextStyle(
                                             color: Theme.of(context)
-                                                .backgroundColor,
+                                                .primaryColorDark,
                                             fontSize: (state) == 1
                                                 ? context
                                                         .read<TopCubit>()
@@ -482,7 +482,7 @@ class ScoreEnterer extends StatelessWidget {
                                     child: Text('2',
                                         style: TextStyle(
                                             color: Theme.of(context)
-                                                .backgroundColor,
+                                                .primaryColorDark,
                                             fontSize: (state) == 2
                                                 ? context
                                                         .read<TopCubit>()
@@ -508,7 +508,7 @@ class ScoreEnterer extends StatelessWidget {
                                     child: Text('3',
                                         style: TextStyle(
                                             color: Theme.of(context)
-                                                .backgroundColor,
+                                                .primaryColorDark,
                                             fontSize: (state) == 3
                                                 ? context
                                                         .read<TopCubit>()
